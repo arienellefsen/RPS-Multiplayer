@@ -46,9 +46,8 @@ connectionsRef.on("value", function(snap) {
 // -------------------------------------------------------------- (CRITICAL - BLOCK) --------------------------- //
 // Set Initial Counter
 
-
 var playerNameOne = "ariene",
-    playerOneScore = 2,
+    playerOneScore = 0,
     playerOneLosses = 1,
     playerOneTurn = true,
     playerOneChoices = '',
@@ -57,47 +56,169 @@ var playerNameOne = "ariene",
     playerSecLosses = 1,
     playerSecTurn = false,
     playerTwoChoices = '',
-    choices = ["R", "P", "S"];
-
-function gameBtn(choicesId){
-//generate button based on array
+    timesClicked = 0;
+    scorePlayerOne = $('#score-PlayerOne');
+    scorePlayerTwo = $('#score-PlayerTwo');
     
-    choices.forEach(function(element) {
-    console.log(element);
-    var btnChoices= $('<input/>').attr({ type: 'button', name:'btn1', class: 'btn-choices', value:element});
 
-    btnChoices.on("click", function(){
 
-      if (playerOneTurn === true){
+function choicesPlayersOne(choicesId, timesClicked){
+//generate button based on array
 
-        var choiceP1= $(this).val();
+//debugger;
+    $(choicesId).on("click", "li", function(event) {
+  //
+   $("#choices1 li").removeClass("choice");
+      $("#choices2 li").removeClass("choice");
+
+    timesClicked++;
+
+      if (timesClicked === 1) {
+
+        $(this).unbind(event);
+        playerOneChoices = $(this).text();
+
+        $(this).addClass("choice");
+
+        //push to array
+
+        console.log("Player one choice: " + $(this).text());
+        nextPlayer(playerOneChoices, timesClicked);
+        
       }
-      else{
-            var choiceP2 = $(this).val();
-      }
 
-    console.log($(this).val());
-
-
-    });
-
-    $(choicesId).append(btnChoices);
+    
 });
 }
 
-function initPlayerOne(){
-  var choicesId = $("#choices1");
-  gameBtn(choicesId);
+function choicesPlayersTwo(choicesId, playerOneChoices){
+//generate button based on array
 
+//debugger;
+    $(choicesId).on("click", "li", function(event) {
+  //
+
+    timesClicked++;
+
+      if (timesClicked === 1) {
+
+        $(this).unbind(event);
+        playerTwoChoices = $(this).text();
+        $(this).addClass("choice");
+        console.log("Player two choice: " + playerTwoChoices);
+        getScore(playerOneChoices, playerTwoChoices);
+        
+      }
+
+});
 }
 
-function initPlayerTwo(){
+
+//ebugger;
+function initPlayerOne(timesClicked){
+  if(playerOneTurn===true){
+    var choicesId = $("#choices1");
+    choicesPlayersOne(choicesId, timesClicked);
+    playerSecTurn = true
+    playerOneTurn = false
+
+  }
+}
+
+function nextPlayer(playerOneChoices){
   var choicesId = $("#choices2");
-  gameBtn(choicesId);
+  choicesPlayersTwo(choicesId, playerOneChoices);
+  timesClicked = 0;
+
+
 }
 
-initPlayerOne();
-initPlayerTwo();
+debugger;
+function getScore(playerOneChoices, playerTwoChoices){
+  console.log(playerOneChoices, playerTwoChoices );
+
+  if (playerOneChoices === playerTwoChoices){
+    console.log("Tied Game");
+    newGame();
+
+  }
+  else if( playerOneChoices === 'Paper' && playerTwoChoices === 'Rock'){
+
+    console.log("Player One won!! Paper!!!");
+    playerOneScore = playerOneScore+1;
+    console.log("Score Player one: " + playerOneScore);
+    scorePlayerOne.text(playerOneScore);
+    newGame();
+  }
+
+  else if( playerOneChoices === 'Rock' && playerTwoChoices === 'Paper'){
+
+    console.log("Player one won!! Paper!!!");
+    playerOneScore = playerOneScore+1;
+     console.log("Score Player one: " + playerOneScore);
+    scorePlayerOne.text(playerOneScore);
+
+    newGame();
+  }
+
+  else if( playerOneChoices === 'Scsissor' && playerTwoChoices === 'Rock'){
+
+    console.log("Player Two won!! Rock!!!");
+    playerSecScore = playerSecScore+1;
+    console.log("Score Player two: " + playerSecScore);
+    scorePlayerTwo.text(playerSecScore);
+    newGame();
+
+  }
+
+  else if( playerOneChoices === 'Rock' && playerTwoChoices === 'Scsissor'){
+
+    console.log("Player one won!! Scsissor!!!");
+    playerOneScore = playerOneScore+1;
+    console.log("Score Player one: " + playerOneScore);
+    scorePlayerOne.text(playerOneScore);
+
+    newGame();
+
+  }
+
+ else if( playerOneChoices === 'Paper' && playerTwoChoices === 'Scsissor'){
+
+    console.log("Player two won!! Scsissor!!!");
+    playerSecScore = playerSecScore+1;
+    console.log("Score Player two: " + playerSecScore);
+    scorePlayerTwo.text(playerSecScore);
+    newGame();
+
+  }
+
+  else if( playerOneChoices === 'Scsissor' && playerTwoChoices === 'Paper'){
+
+    console.log("Player one won!! Scsissor!!!")
+    playerOneScore = playerOneScore+1;
+    console.log("Score Player one: " + playerOneScore);
+    scorePlayerOne.text(playerOneScore);
+
+    newGame();
+
+  }
+
+}
+
+function newGame(){
+      timesClicked = 0;
+      console.log("lets play again!!!");
+      var choicesId = $("#choices1");
+
+     
+
+      choicesPlayersOne(choicesId, timesClicked);
+
+      //initPlayerOne(timesClicked);
+}
+
+
+initPlayerOne(timesClicked);
 
 
 // At the initial load, get a snapshot of the current data.
@@ -111,9 +232,8 @@ database.ref().on("value", function(snapshot) {
     });
 });
 
-
 function dbUpdate(){
-  databases.ref().set({
+  database.ref().set({
         playerNameOne: playerNameOne,
         playerOneScore: playerOneScore,
         playerOneLosses: playerOneLosses,
@@ -142,7 +262,3 @@ function dbUpdate(){
 
 
 // Declare variables
-
-
-
-

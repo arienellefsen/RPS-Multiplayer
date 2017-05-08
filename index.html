@@ -16,6 +16,13 @@
   <!-- Firebase Reference -->
   <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
 
+<style>
+
+.choice{
+  border:2px solid red;
+}
+</style>
+
 </head>
 
 <body>
@@ -24,53 +31,56 @@
     <div class="row">
       <div class="col-md-6">
         
-        Player One name
-      <div id="playerOneName"></div>
+Player One name
+<div id="playerOneName"></div>
 
+Player One Score <p id="score-PlayerOne"> </p>
 
-
-Player One Score
-<div id="choices1"></div>
+<div id="choices1">
+  <ul>
+    <li>Rock</li>
+    <li>Paper</li>
+    <li>Scsissor</li>
+  </ul>
+</div>
 
 Player Looses
 <div id="playerOneloooses"></div>
 
-
 Player Turn
 <div id="playerOneturn"></div>
 
-
-        </div>
-
-
- <div class="col-md-6">
-        
+</div><!-- End col-6-->
 
 
- Player Two name
-      <div id="playerTwoName"></div>
+<div class="col-md-6">
+      
+Player Two name
+
+<div id="playerTwoName"></div>
+
+Player Two Score <p id="score-PlayerTwo"> </p>
+
 Player Two Choices
-<div id="choices2"></div>
-
+<div id="choices2">
+<ul>
+  <li>Rock</li>
+  <li>Paper</li>
+  <li>Scsissor</li>
+</ul>
+</div>
 
 
 Player Looses
 <div id="playerTwoloooses"></div>
 
-
 Player Turn
 <div id="playerTwoturn"></div>
+ 
+</div>
+</div>
+</div>
 
-        </div>
-
-
-      </div>
-    </div>
-
-    
-    </div>
-
-  </div>
 
   <!-- Script -->
   <script src="app.js"></script>
